@@ -1,0 +1,8 @@
+record_type,name,type,terminal,description,number,area,color,material,length,start_terminal,end_terminal,is_shielded
+component,断路器QF2,断路器,X10,主回路保护,,,,,,,,
+component,接触器KM2,接触器,X11,电机驱动,,,,,,,,
+wire,,,,,W-101,1.5,黑,铜,2.1,X10:1,X11:1,否
+wire,,,,,W-102,1.5,黑,铜,2.0,X10:1,X11:1,否
+wire,,,,,W-103,1.5,黑,铜,2.2,X10:1,X11:1,否
+wire,,,,,W-201,0.75,黄绿,铜,3.0,X11:2,X12:5,是
+wire,,,,,W-202,0.75,黄绿,铜,3.1,X11:2,X12:5,是

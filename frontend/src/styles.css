@@ -1,0 +1,110 @@
+:root {
+  --bg-top: #e9f5ff;
+  --bg-bottom: #f7fbfd;
+  --panel-shadow: 0 12px 30px rgba(35, 83, 120, 0.12);
+  --sider-bg: #0f2740;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans SC", "HarmonyOS Sans SC", "PingFang SC", sans-serif;
+  background: radial-gradient(circle at top right, #d8eff7 0%, var(--bg-top) 35%, var(--bg-bottom) 100%);
+  color: #102a43;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-sider {
+  background: linear-gradient(180deg, #123154 0%, var(--sider-bg) 100%) !important;
+}
+
+.brand-box {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+}
+
+.app-header {
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #d9e7f2;
+  padding-inline: 20px !important;
+}
+
+.app-content {
+  padding: 20px;
+}
+
+.page-panel {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--panel-shadow);
+  animation: panel-fade-in 0.35s ease-out;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(13, 124, 145, 0.14), transparent 34%),
+    radial-gradient(circle at 80% 80%, rgba(24, 144, 255, 0.16), transparent 40%),
+    linear-gradient(145deg, #f7fbff 0%, #eaf4fa 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 420px;
+  border-radius: 18px;
+  box-shadow: 0 20px 42px rgba(34, 73, 110, 0.18);
+}
+
+.ant-btn,
+.ant-card,
+.ant-select,
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-input-number {
+  transition: all 0.2s ease;
+}
+
+.ant-btn:hover,
+.ant-card:hover {
+  transform: translateY(-1px);
+}
+
+@keyframes panel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-content {
+    padding: 12px;
+  }
+
+  .page-panel {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .login-card {
+    width: 100%;
+  }
+}

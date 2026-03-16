@@ -1,0 +1,64 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: eplan_parallel_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: eplan_parallel
+      MYSQL_USER: eplan
+      MYSQL_PASSWORD: eplan123456
+    ports:
+      - "13317:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - eplan_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: eplan_parallel_backend
+    environment:
+      APP_NAME: EPLAN智能并线标注系统
+      APP_ENV: production
+      SECRET_KEY: <SECRET_KEY>
+      ACCESS_TOKEN_EXPIRE_MINUTES: 720
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: eplan
+      DB_PASSWORD: eplan123456
+      DB_NAME: eplan_parallel
+      CORS_ORIGINS: http://localhost:13217
+    ports:
+      - "18217:8217"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - eplan_net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: eplan_parallel_frontend
+    ports:
+      - "13217:80"
+    depends_on:
+      - backend
+    networks:
+      - eplan_net
+
+volumes:
+  mysql_data:
+
+networks:
+  eplan_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.251.0.0/24
