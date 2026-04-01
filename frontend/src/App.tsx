@@ -10,6 +10,7 @@ import { ImportPage } from './pages/ImportPage';
 import { LoginPage } from './pages/LoginPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { UsersPage } from './pages/UsersPage';
+import WireAnalysisPage from './pages/WireAnalysisPage';
 
 const GuardedPage = ({ children }: { children: ReactNode }) => (
   <ProtectedRoute>
@@ -66,6 +67,14 @@ export const App = () => (
         element={
           <GuardedPage>
             <UsersPage />
+          </GuardedPage>
+        }
+      />
+      <Route
+        path="/wire-analysis"
+        element={
+          <GuardedPage>
+            <WireAnalysisPage />
           </GuardedPage>
         }
       />

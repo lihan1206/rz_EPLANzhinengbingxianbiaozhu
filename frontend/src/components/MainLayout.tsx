@@ -7,6 +7,7 @@ import {
   ProjectOutlined,
   TeamOutlined,
   UploadOutlined,
+  FunctionOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, Select, Space, Typography } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -24,6 +25,7 @@ const menuItems = [
   { key: '/imports', icon: <UploadOutlined />, label: '数据导入' },
   { key: '/analysis', icon: <ApartmentOutlined />, label: '并线分析' },
   { key: '/annotations', icon: <FileTextOutlined />, label: '自动标注' },
+  { key: '/wire-analysis', icon: <FunctionOutlined />, label: '导线分析工具' },
   { key: '/users', icon: <TeamOutlined />, label: '用户与日志' },
 ];
 

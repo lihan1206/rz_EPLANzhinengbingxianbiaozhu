@@ -70,3 +70,35 @@ export interface OperationLog {
   detail: string;
   created_at: string;
 }
+
+export interface WireData {
+  id: string;
+  start: string;
+  end: string;
+  area: number;
+  color: string;
+  properties: Record<string, any>;
+}
+
+export interface WireAnalysisRequest {
+  wires: WireData[];
+  min_parallel_count?: number;
+  max_parallel_count?: number;
+}
+
+export interface ParallelGroupOutput {
+  parallel_group_id: string;
+  count: number;
+  total_area: number;
+  start: string;
+  end: string;
+  label: string;
+  compliant: boolean;
+  notes: string[];
+}
+
+export interface WireAnalysisResponse {
+  parallel_groups: ParallelGroupOutput[];
+  total_groups: number;
+  total_wires_analyzed: number;
+}

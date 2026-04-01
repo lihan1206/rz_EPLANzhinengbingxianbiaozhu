@@ -9,6 +9,8 @@ import {
   ParallelGroup,
   Project,
   UserInfo,
+  WireAnalysisRequest,
+  WireAnalysisResponse,
 } from '../types';
 
 export const login = async (payload: LoginPayload) => {
@@ -103,4 +105,9 @@ export const downloadGroupsCsv = async (projectId: number) => {
     responseType: 'blob',
   });
   return response.data as Blob;
+};
+
+export const analyzeWires = async (payload: WireAnalysisRequest) => {
+  const { data } = await apiClient.post<WireAnalysisResponse>('/wire-analysis/analyze', payload);
+  return data;
 };
