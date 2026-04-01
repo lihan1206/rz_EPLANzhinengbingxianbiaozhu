@@ -140,3 +140,49 @@ class OperationLogOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class WireInput(BaseModel):
+    id: str = Field(description="导线唯一标识")
+    start_terminal: str = Field(alias="start", description="起点端子")
+    end_terminal: str = Field(alias="end", description="终点端子")
+    area: float = Field(gt=0, description="截面积(mm²)")
+    color: str = Field(description="颜色")
+    attributes: dict[str, str | bool | int | float] | None = Field(default=None, description="扩展属性")
+
+    class Config:
+        populate_by_name = True
+
+
+class WireAnalyzeConfig(BaseModel):
+    min_parallel_count: int = Field(default=2, ge=2, description="最小并线数量")
+    max_parallel_count: int = Field(default=4, ge=2, le=10, description="最大并线数量")
+    check_voltage_compatibility: bool = Field(default=True, description="检查电压等级兼容性")
+    check_shield_consistency: bool = Field(default=True, description="检查屏蔽一致性")
+
+
+class WireAnalyzeRequest(BaseModel):
+    wires: list[WireInput] = Field(min_length=1, description="导线列表")
+    config: WireAnalyzeConfig | None = Field(default=None, description="分析配置")
+
+
+class ParallelGroupResult(BaseModel):
+    parallel_group_id: str = Field(description="并线组ID，如 PG01")
+    count: int = Field(description="并线数量")
+    total_area: float = Field(description="总截面积(mm²)")
+    start: str = Field(description="起点端子")
+    end: str = Field(description="终点端子")
+    label: str = Field(description="标注文本，格式: N×A mm²")
+    compliant: bool = Field(description="是否合规")
+    notes: list[str] = Field(description="判断依据说明")
+    wire_ids: list[str] = Field(description="包含的导线ID列表")
+    color: str = Field(description="导线颜色")
+    area_per_wire: float = Field(description="单根导线截面积(mm²)")
+    attributes: dict[str, str | bool | int | float] = Field(default_factory=dict, description="合并后的属性")
+
+
+class WireAnalyzeResult(BaseModel):
+    parallel_groups: list[ParallelGroupResult] = Field(description="并线组列表")
+    total_wires: int = Field(description="输入导线总数")
+    grouped_wires: int = Field(description="已分组的导线数")
+    ungrouped_wires: int = Field(description="未分组的导线数")

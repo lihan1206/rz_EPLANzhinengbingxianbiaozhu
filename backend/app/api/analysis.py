@@ -4,8 +4,9 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.models import OperationLog, ParallelGroup, Project, User
-from app.schemas import AnalyzeRequest, AnalyzeResult, ParallelGroupOut
+from app.schemas import AnalyzeRequest, AnalyzeResult, ParallelGroupOut, WireAnalyzeRequest, WireAnalyzeResult
 from app.services.parallel_analysis import analyze_project_parallel_groups
+from app.services.wire_parallel_analyzer import AnalysisConfig, analyze_wires
 
 router = APIRouter(prefix="/analysis", tags=["并线分析"])
 
@@ -41,4 +42,44 @@ def list_groups(project_id: int, db: Session = Depends(get_db), _: User = Depend
         .filter(ParallelGroup.project_id == project_id)
         .order_by(ParallelGroup.created_at.desc())
         .all()
+    )
+
+
+@router.post("/wires/analyze", response_model=WireAnalyzeResult)
+def analyze_wires_direct(
+    payload: WireAnalyzeRequest,
+    _: User = Depends(get_current_user),
+):
+    config = None
+    if payload.config:
+        config = AnalysisConfig(
+            min_parallel_count=payload.config.min_parallel_count,
+            max_parallel_count=payload.config.max_parallel_count,
+            check_voltage_compatibility=payload.config.check_voltage_compatibility,
+            check_shield_consistency=payload.config.check_shield_consistency,
+        )
+
+    wires_data = []
+    for wire in payload.wires:
+        wire_dict = {
+            "id": wire.id,
+            "start_terminal": wire.start_terminal,
+            "end_terminal": wire.end_terminal,
+            "area": wire.area,
+            "color": wire.color,
+            "attributes": wire.attributes or {},
+        }
+        wires_data.append(wire_dict)
+
+    groups = analyze_wires(wires_data, config)
+
+    grouped_wire_ids = set()
+    for group in groups:
+        grouped_wire_ids.update(group.get("wire_ids", []))
+
+    return WireAnalyzeResult(
+        parallel_groups=groups,
+        total_wires=len(payload.wires),
+        grouped_wires=len(grouped_wire_ids),
+        ungrouped_wires=len(payload.wires) - len(grouped_wire_ids),
     )
