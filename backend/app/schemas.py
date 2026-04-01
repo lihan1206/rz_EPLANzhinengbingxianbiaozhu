@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -140,3 +141,34 @@ class OperationLogOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class WireInput(BaseModel):
+    WIRE_ID: str
+    NAME: str
+    NODE_A: str
+    NODE_B: str
+    COLOR: str
+    CABLE_TYPE: str
+
+
+class MergeGroup(BaseModel):
+    group_id: str
+    wires: list[str]
+    name: str
+    color: str
+    cable_type: str
+    notes: str
+
+
+class MergeResult(BaseModel):
+    success: bool
+    errors: list[str]
+    warnings: list[str]
+    groups: list[MergeGroup]
+    total_wires: int | None = None
+    total_groups: int | None = None
+
+
+class MergeRequest(BaseModel):
+    wires: list[WireInput]
