@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api import analysis, annotations, auth, dashboard, exports, imports, json_analysis, logs, projects, users
+from app.api import analysis, annotations, auth, dashboard, exports, imports, json_analysis, logs, projects, users, wire_merger
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(auth.router)
@@ -13,3 +13,4 @@ api_router.include_router(dashboard.router)
 api_router.include_router(users.router)
 api_router.include_router(exports.router)
 api_router.include_router(logs.router)
+api_router.include_router(wire_merger.router)

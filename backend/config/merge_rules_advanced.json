@@ -1,0 +1,50 @@
+{
+  "name": "高级并线规则",
+  "description": "支持电压等级和自定义条件的并线规则",
+  "match_fields": [
+    "name",
+    "color",
+    "cable_type",
+    "voltage"
+  ],
+  "auto_merge_rules": [
+    {
+      "field": "name",
+      "operator": "contains",
+      "value": "JUMP",
+      "description": "NAME包含JUMP的导线自动合并"
+    },
+    {
+      "field": "name",
+      "operator": "starts_with",
+      "value": "TB",
+      "description": "NAME以TB开头的导线自动合并"
+    },
+    {
+      "field": "cable_type",
+      "operator": "equals",
+      "value": "控制线",
+      "description": "控制线类型自动合并"
+    }
+  ],
+  "case_sensitive": false,
+  "ignore_whitespace": true,
+  "grouping_strategy": "strict",
+  "conflict_resolution": "keep_separate",
+  "advanced_rules": {
+    "voltage_merge": {
+      "enabled": true,
+      "tolerance": 10,
+      "description": "电压相差10%以内可合并"
+    },
+    "cross_panel_merge": {
+      "enabled": false,
+      "description": "跨面板合并（预留）"
+    },
+    "length_tolerance": {
+      "enabled": true,
+      "max_difference_percent": 20,
+      "description": "长度差异20%以内可合并"
+    }
+  }
+}

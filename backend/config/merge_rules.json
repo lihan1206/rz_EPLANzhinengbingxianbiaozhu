@@ -1,0 +1,29 @@
+{
+  "name": "默认并线规则",
+  "description": "基于NAME、COLOR、CABLE_TYPE三字段匹配的默认规则",
+  "match_fields": [
+    "name",
+    "color",
+    "cable_type"
+  ],
+  "auto_merge_rules": [
+    {
+      "field": "name",
+      "operator": "contains",
+      "value": "JUMP",
+      "description": "NAME包含JUMP的导线自动合并"
+    }
+  ],
+  "case_sensitive": false,
+  "ignore_whitespace": true,
+  "advanced_rules": {
+    "voltage_merge": {
+      "enabled": false,
+      "description": "基于电压等级合并（预留）"
+    },
+    "cross_panel_merge": {
+      "enabled": false,
+      "description": "跨面板合并（预留）"
+    }
+  }
+}
