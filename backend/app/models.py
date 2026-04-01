@@ -65,6 +65,11 @@ class Wire(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), index=True)
+    wire_id: Mapped[str] = mapped_column(String(50), nullable=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=True, index=True)
+    node_a: Mapped[str] = mapped_column(String(50), nullable=True)
+    node_b: Mapped[str] = mapped_column(String(50), nullable=True)
+    cable_type: Mapped[str] = mapped_column(String(50), nullable=True)
     number: Mapped[str] = mapped_column(String(30), nullable=False)
     area: Mapped[float] = mapped_column(Numeric(6, 2), nullable=False)
     color: Mapped[str] = mapped_column(String(20), nullable=False)

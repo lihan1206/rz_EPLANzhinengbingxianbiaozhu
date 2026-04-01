@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "description": "导线并线识别规则配置",
+  "rules": [
+    {
+      "type": "default",
+      "enabled": true,
+      "priority": 0,
+      "params": {
+        "check_name": true,
+        "check_color": true,
+        "check_cable_type": true
+      }
+    },
+    {
+      "type": "pattern",
+      "enabled": true,
+      "priority": 1,
+      "params": {
+        "pattern": "JUMP",
+        "field": "name"
+      }
+    },
+    {
+      "type": "attribute",
+      "enabled": false,
+      "priority": 2,
+      "params": {
+        "attribute_name": "voltage",
+        "match_value": null
+      }
+    }
+  ],
+  "settings": {
+    "min_parallel_count": 2,
+    "max_parallel_count": 10,
+    "strict_mode": false,
+    "case_sensitive": false
+  }
+}

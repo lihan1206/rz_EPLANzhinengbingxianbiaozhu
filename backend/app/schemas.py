@@ -154,6 +154,32 @@ class WireInput(BaseModel):
         populate_by_name = True
 
 
+class WireDataInput(BaseModel):
+    wire_id: str = Field(description="导线唯一标识")
+    name: str = Field(description="导线名称")
+    node_a: str = Field(description="节点A")
+    node_b: str = Field(description="节点B")
+    color: str = Field(description="颜色")
+    cable_type: str = Field(description="电缆类型")
+    attributes: dict[str, str | bool | int | float] | None = Field(default=None, description="扩展属性")
+
+
+class WireDataCreate(BaseModel):
+    wire_id: str | None = Field(default=None, description="导线唯一标识")
+    name: str | None = Field(default=None, description="导线名称")
+    node_a: str | None = Field(default=None, description="节点A")
+    node_b: str | None = Field(default=None, description="节点B")
+    cable_type: str | None = Field(default=None, description="电缆类型")
+    number: str = Field(description="导线编号")
+    area: float = Field(gt=0, description="截面积(mm²)")
+    color: str = Field(description="颜色")
+    material: str = Field(default="铜", description="材质")
+    length: float = Field(default=0, ge=0, description="长度")
+    start_terminal: str = Field(description="起点端子")
+    end_terminal: str = Field(description="终点端子")
+    is_shielded: bool = Field(default=False, description="是否屏蔽")
+
+
 class WireAnalyzeConfig(BaseModel):
     min_parallel_count: int = Field(default=2, ge=2, description="最小并线数量")
     max_parallel_count: int = Field(default=4, ge=2, le=10, description="最大并线数量")
@@ -186,3 +212,35 @@ class WireAnalyzeResult(BaseModel):
     total_wires: int = Field(description="输入导线总数")
     grouped_wires: int = Field(description="已分组的导线数")
     ungrouped_wires: int = Field(description="未分组的导线数")
+
+
+class WireDataAnalyzeRequest(BaseModel):
+    wires: list[WireDataInput] = Field(min_length=1, description="导线数据列表")
+    config: WireAnalyzeConfig | None = Field(default=None, description="分析配置")
+    rules_file: str | None = Field(default=None, description="自定义规则配置文件路径")
+
+
+class ParallelGroupDataResult(BaseModel):
+    group_id: str = Field(description="并线组ID")
+    wires: list[str] = Field(description="包含的导线ID列表")
+    name: str = Field(description="合并后名称")
+    color: str = Field(description="合并后颜色")
+    cable_type: str = Field(description="合并后类型")
+    notes: list[str] = Field(description="推理说明")
+
+
+class WireDataAnalyzeResult(BaseModel):
+    groups: list[ParallelGroupDataResult] = Field(description="并线组列表")
+    total_wires: int = Field(description="输入导线总数")
+    grouped_wires: int = Field(description="已分组的导线数")
+    ungrouped_wires: int = Field(description="未分组的导线数")
+    warnings: list[str] = Field(default_factory=list, description="警告信息列表")
+    errors: list[str] = Field(default_factory=list, description="错误信息列表")
+
+
+class ImportValidationResult(BaseModel):
+    valid: bool = Field(description="是否有效")
+    errors: list[str] = Field(default_factory=list, description="错误列表")
+    warnings: list[str] = Field(default_factory=list, description="警告列表")
+    duplicate_wire_ids: list[str] = Field(default_factory=list, description="重复的导线ID列表")
+    missing_fields: list[str] = Field(default_factory=list, description="缺失字段列表")
